@@ -1,0 +1,5 @@
+discord==2.5.0
+DateTime==5.5
+gcsa==2.5.1
+pysondb==1.6.7
+python-dotenv==1.0.1
