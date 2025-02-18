@@ -1,6 +1,5 @@
 import os
 import discord
-import time
 from gcsa.google_calendar import GoogleCalendar
 from gcsa.event import Event
 from datetime import datetime
