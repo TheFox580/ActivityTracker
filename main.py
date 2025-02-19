@@ -45,12 +45,12 @@ async def on_message(message):
         for event in tasks.getAll():
             if event["name"] == task_name:
                 await message.add_reaction('❌')
-                await message.channel.send(f"A task with the name **{task_name}** has already been started. Please choose another name for it.")
+                await message.channel.send(f'A task with the name "**{task_name}**" has already been started. Please choose another name for it.')
                 return
         tasks.add({"name":message.content[6:],"start":to_timestamp(datetime.now()), "end":None})
         print(f"Started task {task_name} at {formated_time(datetime.now())}")
         await message.add_reaction('✅')
-        await message.channel.send(f"Starting {task_name}.")
+        await message.channel.send(f'Starting "{task_name}".')
 
     elif message_content.startswith('end'):
         task_name = message.content[4:]
@@ -62,10 +62,10 @@ async def on_message(message):
                 tasks.update({"name":task_name}, {"end":to_timestamp(end)})
                 print(f"Ended task {task_name} at {formated_time(end)}")
                 await message.add_reaction('✅')
-                await message.channel.send(f"{task_name} ended.")
+                await message.channel.send(f'"{task_name}" ended.')
                 return
         await message.add_reaction('❌')
-        await message.channel.send(f"{task_name} does not exist.")
+        await message.channel.send(f'"{task_name}" does not exist.')
 
     elif message_content == 'get all tasks':
         await message.add_reaction('✅')
@@ -74,9 +74,9 @@ async def on_message(message):
         if len(tasks.getAll()) > 0:
             for event in tasks.getAll():
                 if event['end'] == None:
-                    tasks_started += f"- {event['name']} started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n"
+                    tasks_started += f'- "{event['name']}" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n'
                 else:
-                    tasks_finished += f"- {event['name']} started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n"
+                    tasks_finished += f'- "{event['name']}" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n'
         if tasks_started == "# Tasks started:\n":
             tasks_started += "- No tasks have been started yet."
         if tasks_finished == "# Tasks finished:\n":
