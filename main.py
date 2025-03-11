@@ -74,9 +74,9 @@ async def on_message(message):
         if len(tasks.getAll()) > 0:
             for event in tasks.getAll():
                 if event['end'] == None:
-                    tasks_started += f'- "{event['name']}" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n'
+                    tasks_started += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n"
                 else:
-                    tasks_finished += f'- "{event['name']}" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n'
+                    tasks_finished += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n"
         if tasks_started == "# Tasks started:\n":
             tasks_started += "- No tasks have been started yet."
         if tasks_finished == "# Tasks finished:\n":
