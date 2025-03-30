@@ -41,6 +41,7 @@ async def on_message(message):
     message_content:str = message.content.lower()
 
     if message_content.startswith('start'):
+        print(f"User {message.author} started a new task")
         task_name = message.content[6:]
         for event in tasks.getAll():
             if event["name"] == task_name:
@@ -53,6 +54,7 @@ async def on_message(message):
         await message.channel.send(f'Starting "{task_name}".')
 
     elif message_content.startswith('end'):
+        print(f"User {message.author} ended a task")
         task_name = message.content[4:]
         for event in tasks.getAll():
             if event["name"] == task_name:
@@ -68,17 +70,22 @@ async def on_message(message):
         await message.channel.send(f'"{task_name}" does not exist.')
 
     elif message_content == 'get all tasks':
+        print(f"User {message.author} is asking to see all the tasks")
         await message.add_reaction('✅')
         tasks_started = "# Tasks started:\n"
         tasks_finished = "# Last 10 tasks finished:\n"        
         tasks_list = tasks.getAll()
         tasks_list = tasks_list[-10:]
+        tasks_started_nb = 1
+        tasks_finished_nb = 1
         if len(tasks_list) > 0:
             for event in tasks_list:
                 if event['end'] == None:
-                    tasks_started += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n"
+                    tasks_started += f"{tasks_started_nb}. \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n"
+                    tasks_started_nb += 1
                 else:
-                    tasks_finished += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n"
+                    tasks_finished += f"{tasks_finished_nb}. \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n"
+                    tasks_finished_nb += 1
         if tasks_started == "# Tasks started:\n":
             tasks_started += "- No tasks have been started yet."
         if tasks_finished == "# Last 10 tasks finished:\n":
@@ -87,10 +94,12 @@ async def on_message(message):
         await message.channel.send(tasks_finished)
 
     elif message_content == 'commands':
+        print(f"User {message.author} is asking to see all commands")
         await message.add_reaction('✅')
         await message.channel.send("# Commands:\n- start [task name] --> (starts a task)\n  - [task name] : str --> Name of the task\n- end [task name] --> (ends the task, if it exists)\n  - [task name] : str --> Name of the task\n- get all tasks --> (show all tasks, started & finished (only the last 10))\n- commands --> (shows all commands)")
 
     else:
+        print(f"User {message.author} entered an invalid command")
         await message.add_reaction('❌')
         await message.channel.send("Invalid command. Type **commands** to see all available commands.")
 
