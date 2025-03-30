@@ -70,23 +70,25 @@ async def on_message(message):
     elif message_content == 'get all tasks':
         await message.add_reaction('✅')
         tasks_started = "# Tasks started:\n"
-        tasks_finished = "# Tasks finished:\n"
-        if len(tasks.getAll()) > 0:
-            for event in tasks.getAll():
+        tasks_finished = "# Last 10 tasks finished:\n"        
+        tasks_list = tasks.getAll()
+        tasks_list = tasks_list[-10:]
+        if len(tasks_list) > 0:
+            for event in tasks_list:
                 if event['end'] == None:
                     tasks_started += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and has not ended yet.\n"
                 else:
                     tasks_finished += f"- \"{event['name']}\" started at {formated_time(to_datetime(event['start']))} and ended at {formated_time(to_datetime(event['end']))}\n"
         if tasks_started == "# Tasks started:\n":
             tasks_started += "- No tasks have been started yet."
-        if tasks_finished == "# Tasks finished:\n":
+        if tasks_finished == "# Last 10 tasks finished:\n":
             tasks_finished += "- No tasks have been finished yet."
         await message.channel.send(tasks_started)
         await message.channel.send(tasks_finished)
 
     elif message_content == 'commands':
         await message.add_reaction('✅')
-        await message.channel.send("# Commands:\n- start [task name] --> (starts a task)\n  - [task name] : str --> Name of the task\n- end [task name] --> (ends the task, if it exists)\n  - [task name] : str --> Name of the task\n- get all tasks --> (show all tasks, started & finished)\n- commands --> (shows all commands)")
+        await message.channel.send("# Commands:\n- start [task name] --> (starts a task)\n  - [task name] : str --> Name of the task\n- end [task name] --> (ends the task, if it exists)\n  - [task name] : str --> Name of the task\n- get all tasks --> (show all tasks, started & finished (only the last 10))\n- commands --> (shows all commands)")
 
     else:
         await message.add_reaction('❌')
